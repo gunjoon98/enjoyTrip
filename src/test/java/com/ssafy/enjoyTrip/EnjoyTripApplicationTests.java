@@ -1,4 +1,4 @@
-package com.ssafy.enjoytrip;
+package com.ssafy.enjoyTrip;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +8,7 @@ class EnjoyTripApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

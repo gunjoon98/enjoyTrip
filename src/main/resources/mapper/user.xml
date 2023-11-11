@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.enjoyTrip.model.mapper.UserMapper">
+
+    <select id="login" parameterType="User" resultType="User">
+        select id, pw
+        from user
+        where id=#{id} and pw=#{pw} and is_remove=false
+    </select>
+
+    <insert id="register" parameterType="User">
+        insert into user(id, pw, name, email, role)
+        values (#{id}, #{pw}, #{name}, #{email}, #{role})
+    </insert>
+
+    <update id="update" parameterType="User">
+        update user
+        set pw=#{pw}, name=#{name}
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="String">
+        update user
+        set is_remove=true
+        where id=#{id}
+    </delete>
+</mapper>
