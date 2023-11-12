@@ -14,11 +14,13 @@ import java.util.Map;
 public class UserService {
     private final UserMapper userMapper;
 
-    public String login(User user) {
+    public Map<String, Object> login(User user) {
         User loginUser = userMapper.login(user);
 
         if(loginUser == null) return null;
-        return JWTUtil.generateToken(user);
+        Map<String, Object> responseMap = new HashMap<>();
+        responseMap.put("token", loginUser);
+        return responseMap;
     }
 
     public void register(User user) {

@@ -1,22 +1,26 @@
 package com.ssafy.enjoyTrip.model.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Attraction {
-    private int id;
-    private int type;
+    private Integer id;
+    private Integer type;
     private String title;
     private String address;
-    private int sidoCode;
-    private int gugunCode;
+    private Integer sidoCode;
+    private Integer gugunCode;
     private String overview;
-    private double latitude;
-    private double longitude;
+    private Double latitude;
+    private Double longitude;
+    private String mainImagePath;
+    private List<Integer> keywordCodes;
+    private List<Keyword> keywords;
+    private List<ImageInfo> imageInfos;
 }

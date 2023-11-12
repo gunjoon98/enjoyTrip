@@ -19,11 +19,9 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody User user) {
-        String token = userService.login(user);
+        Map<String, Object> responseMap = userService.login(user);
 
-        if(token == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("token", token);
+        if(responseMap == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         return ResponseEntity.ok(responseMap);
     }
 

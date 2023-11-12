@@ -13,7 +13,6 @@ import javax.servlet.Filter;
 
 
 @Configuration
-@EnableWebMvc
 @MapperScan(basePackages = "com.ssafy.enjoyTrip.*.mapper")
 public class WebConfiguration implements WebMvcConfigurer {
 
