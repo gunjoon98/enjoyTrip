@@ -4,6 +4,9 @@ import com.ssafy.enjoyTrip.model.dto.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.ClassPathResource;
+
+import java.io.IOException;
 
 import static com.ssafy.enjoyTrip.util.JWTUtil.decodeToken;
 import static com.ssafy.enjoyTrip.util.JWTUtil.validateToken;

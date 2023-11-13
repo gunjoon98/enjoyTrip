@@ -14,8 +14,7 @@ public class Attraction {
     private Integer type;
     private String title;
     private String address;
-    private Integer sidoCode;
-    private Integer gugunCode;
+    private Integer cityCode;
     private String overview;
     private Double latitude;
     private Double longitude;

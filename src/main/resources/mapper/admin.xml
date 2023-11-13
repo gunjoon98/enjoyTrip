@@ -9,12 +9,12 @@
         a.type as a_type,
         a.title as a_title,
         a.address as a_address,
-        a.sido_code as a_sido_code,
-        a.gugun_code as a_gugun_code,
+        a.city_code as a_city_code,
         a.overview as a_overview,
         a.latitude as a_latitude,
         a.longitude as a_longtitue,
         k.keyword as k_keyword,
+        k.code as k_code,
         i.id as i_id,
         CONCAT('/', i.folder_name, '/', i.image_name) as image_path,
         i.original_image_name as i_original_image_name,
@@ -23,9 +23,8 @@
         left outer join keyword_match km on a.id = km.attraction_id
         inner join keyword_info k on km.keyword_code = k.code
         left outer join image_info i on a.id = i.attraction_id
-        where a_id = #{attractionId}
+        where a.id = #{attractionId}
     </select>
-    -->
 
     <select id="getAttractionList" parameterType="Map" resultMap="AttractionListMap">
         select
@@ -33,8 +32,6 @@
         a.title as a_title,
         a.address as a_address,
         a.overview as a_overview,
-        a.latitude as a_latitude,
-        a.longitude as a_longtitue,
         CONCAT('/', i.folder_name, '/', i.image_name) as main_image_path
         from attraction a
         left outer join image_info i on a.id = i.attraction_id
@@ -42,11 +39,8 @@
         <if test="title != null">
             and a.title like CONCAT('%', #{title}, '%')
         </if>
-        <if test="sidoCode != 0">
-            and a.sidoCode = #{sidoCode}
-        </if>
-        <if test="gugunCode != 0">
-            and a.gugunCode = #{gugunCode}
+        <if test="cityCode != null">
+            and a.city_code = #{cityCode}
         </if>
         and i.is_representative = true
         </where>
@@ -55,8 +49,8 @@
     </select>
 
     <insert id="registerAttraction" parameterType="Attraction">
-        insert into attraction (type, title, address, sido_code, gugun_code, overview, latitude, longitude)
-        values (#{type}, #{title}, #{address}, #{sidoCode}, #{gugunCode}, #{overview}, #{latitude}, #{longitude})
+        insert into attraction (type, title, address, city_code, overview, latitude, longitude)
+        values (#{type}, #{title}, #{address}, ${cityCode}, #{overview}, #{latitude}, #{longitude})
         <selectKey keyProperty="id" resultType="int" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
@@ -83,15 +77,15 @@
         <result column="a_type" property="type"/>
         <result column="a_title" property="title"/>
         <result column="a_address" property="address"/>
-        <result column="a_sido_code" property="sidoCode"/>
-        <result column="a_gugun_code" property="gugunCode"/>
+        <result column="a_city_code" property="cityCode"/>
         <result column="a_overview" property="overview"/>
         <result column="a_latitude" property="latitude"/>
         <result column="a_longitude" property="longitude"/>
-        <collection property="keywords" ofType="String" javaType="List">
+        <collection property="keywords" ofType="Keyword" javaType="List">
             <result column="k_keyword" property="keyword"/>
+            <result column="k_code" property="code"/>
         </collection>
-        <collection property="ImageInfos" ofType="ImageInfo" javaType="List">
+        <collection property="imageInfos" ofType="ImageInfo" javaType="List">
             <id column="i_id" property="id"/>
             <result column="image_path" property="imagePath"/>
             <result column="i_original_image_name" property="originalImageName"/>
@@ -105,8 +99,6 @@
         <result column="a_title" property="title"/>
         <result column="a_address" property="address"/>
         <result column="a_overview" property="overview"/>
-        <result column="a_latitude" property="latitude"/>
-        <result column="a_longitude" property="longitude"/>
         <result column="main_image_path" property="mainImagePath"/>
     </resultMap>
 </mapper>

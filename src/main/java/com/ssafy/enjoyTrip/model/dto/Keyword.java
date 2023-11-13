@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class Keyword {
-    private int code;
-    private int keyword;
+    private Integer code;
+    private String keyword;
 }
 

@@ -15,16 +15,28 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminController {
     private final AdminService adminService;
+
     @GetMapping("/attraction")
     public ResponseEntity<?> getAttractionList(@RequestBody Map<String, Object> map) {
-        System.out.println(map);
         List<Attraction> attractions = adminService.getAttractionList(map);
         return ResponseEntity.ok().body(attractions);
+    }
+
+    @GetMapping("/attraction/{id}")
+    public ResponseEntity<?> getAttraction(@PathVariable("id") int attractionId) {
+        Attraction attraction = adminService.getAttraction(attractionId);
+        return ResponseEntity.ok().body(attraction);
     }
 
     @PostMapping("/attraction")
     public ResponseEntity<?> registerAttraction(@ModelAttribute Attraction attraction, @RequestParam MultipartFile mainImage, @RequestParam List<MultipartFile> images) {
         adminService.registerAttraction(attraction, mainImage, images);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/attraction/{id}")
+    public ResponseEntity<?> updateAttraction(@ModelAttribute Attraction attraction, @RequestParam MultipartFile mainImage,
+                                              @RequestParam List<MultipartFile> images, @RequestParam List<Integer> deleteImages) {
         return ResponseEntity.ok().build();
     }
 }

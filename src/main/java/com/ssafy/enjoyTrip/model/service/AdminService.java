@@ -34,10 +34,13 @@ public class AdminService {
         Map<String, Object> params = new HashMap<>();
         params.put("start", (int)map.get("page") * sizePerPage);
         params.put("sizePerPage", sizePerPage);
-        params.put("sidoCode", map.get("sidoCode"));
-        params.put("gugunCode", map.get("gugunCode"));
+        params.put("cityCode", map.get("cityCode"));
         params.put("title", map.get("title"));
         return adminMapper.getAttractionList(params);
+    }
+
+    public Attraction getAttraction(int attractionId) {
+        return adminMapper.getAttraction(attractionId);
     }
 
     @Transactional

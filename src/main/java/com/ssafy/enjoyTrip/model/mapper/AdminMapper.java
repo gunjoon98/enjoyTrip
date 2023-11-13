@@ -8,9 +8,8 @@ import java.util.Map;
 
 public interface AdminMapper {
     List<Attraction> getAttractionList(Map<String, Object> map);
-    //Attraction getAttraction(int attractionId);
-    //int registerImage(List<ImageInfo> imageInfos);
-    //int updateAttraction(Attraction attraction);
+    Attraction getAttraction(int attractionId);
+    int updateAttraction(Attraction attraction);
     //int deleteAttraction(String attractionId);
     //int deleteImage(String imageId);
     int registerAttraction(Attraction attraction);
