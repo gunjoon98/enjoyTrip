@@ -6,9 +6,9 @@ import com.ssafy.enjoyTrip.model.dto.Keyword;
 import java.util.List;
 import java.util.Map;
 
-public interface AttracionMapper {
+public interface AttractionMapper {
     List<Keyword> getKeywordList();
-    List<Map<String, Object>> getSidoList();
-    List<Attraction> getAttractionList(Map<String, Object> map);
+    List<Map<String, Object>> getcityList();
+    //List<Attraction> getAttractionList(Map<String, Object> map);
 }
 
