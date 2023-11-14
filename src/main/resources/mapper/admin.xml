@@ -57,11 +57,11 @@
     </insert>
 
     <insert id="registerKeywordMatch" parameterType="Attraction">
-        insert into keyword_match (attraction_id, keyword_code)
-        values
-        <foreach collection="keywordCodes" item="item" separator=",">
-            (#{id}, #{item})
-        </foreach>
+    insert into keyword_match (attraction_id, keyword_code)
+    values
+    <foreach collection="keywordCodes" item="item" separator=",">
+        (#{id}, #{item})
+    </foreach>
     </insert>
 
     <insert id="registerImageInfo" parameterType="list">

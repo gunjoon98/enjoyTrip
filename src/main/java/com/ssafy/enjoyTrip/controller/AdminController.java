@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,22 +18,39 @@ import java.util.Map;
 public class AdminController {
     private final AdminService adminService;
 
-    @GetMapping("/attraction")
-    public ResponseEntity<?> getAttractionList(@RequestBody Map<String, Object> map) {
-        List<Attraction> attractions = adminService.getAttractionList(map);
-        return ResponseEntity.ok().body(attractions);
+    @GetMapping("/attractions")
+    public ResponseEntity<?> getAttractionList(@RequestParam(required = false) Integer cityCode, @RequestParam(required = false) String title,
+                                               @RequestParam Integer page) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("cityCode", cityCode);
+        map.put("title", title);
+        map.put("page", page);
+        return ResponseEntity.ok().body(adminService.getAttractionList(map));
     }
 
     @GetMapping("/attraction/{id}")
-    public ResponseEntity<?> getAttraction(@PathVariable("id") int attractionId) {
-        Attraction attraction = adminService.getAttraction(attractionId);
-        return ResponseEntity.ok().body(attraction);
+    public ResponseEntity<?> getAttraction(@PathVariable("id") Integer attractionId) {
+        return ResponseEntity.ok().body(adminService.getAttraction(attractionId));
     }
 
     @PostMapping("/attraction")
-    public ResponseEntity<?> registerAttraction(@ModelAttribute Attraction attraction, @RequestParam MultipartFile mainImage, @RequestParam List<MultipartFile> images) {
-        System.out.println(attraction);
-        adminService.registerAttraction(attraction, mainImage, images);
+    public ResponseEntity<?> registerAttraction(@ModelAttribute Attraction attraction, @RequestParam MultipartFile mainImage,
+                                                @RequestParam List<MultipartFile> images) {
+        if(mainImage.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<MultipartFile> existImageList = new ArrayList<>();
+        for(MultipartFile image : images) {
+            if(!image.isEmpty()) existImageList.add(image);
+        }
+
+        List<Integer> keywordCodes = attraction.getKeywordCodes();
+        for(int i=keywordCodes.size()-1; i>=0; i--) {
+            if(keywordCodes.get(i) == null) keywordCodes.remove(i);
+        }
+
+        adminService.registerAttraction(attraction, mainImage, existImageList);
         return ResponseEntity.ok().build();
     }
 

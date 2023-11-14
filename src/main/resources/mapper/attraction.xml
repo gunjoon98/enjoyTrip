@@ -15,7 +15,7 @@
 
     <select id="getAttractionList" parameterType="Map" resultMap="AttractionListMap">
         select
-        a.id as a_id,
+        distinct a.id as a_id,
         a.title as a_title,
         a.address as a_address,
         a.overview as a_overview,
@@ -40,11 +40,88 @@
         limit #{column}
     </select>
 
+    <select id="getAttraction" parameterType="int" resultMap="AttractionMap">
+        select
+        a.id as a_id,
+        a.type as a_type,
+        a.title as a_title,
+        a.address as a_address,
+        a.overview as a_overview,
+        a.latitude as a_latitude,
+        a.longitude as a_longitude,
+        i.image_path as i_image_path
+        from attraction a
+        left outer join image_info i on a.id = i.attraction_id
+        where a.id = #{attractionId} and i.is_representative = true
+    </select>
+
+    <insert id="registerInterest" parameterType="Map">
+        insert into interest_attraction (user_id, attraction_id)
+        values (#{userId}, #{attractionId})
+    </insert>
+
+    <delete id="deleteInterest" parameterType="Map">
+        delete from interest_attraction
+        where user_id = #{user_id} and attraction_id = #{attractionId}
+    </delete>
+    
+    <select id="getInterestList" parameterType="int" resultMap="InterestListMap">
+        select
+        a.id as a_id,
+        a.type as a_type,
+        a.title as a_title,
+        a.address as a_address,
+        a.overview as a_overview,
+        i.image_path as i_image_path
+        from interest_attraction ia
+        inner join attraction a on ia.attraction_id = a.id
+        left outer join image_info i on a.id = i.attraction_id
+        where ia.user_id = #{userId}
+    </select>
+
+    <select id="getAttractionMapList" parameterType="Map" resultMap="AttractionMap">
+        select
+        a.id as a_id,
+        a.type as a_type,
+        a.title as a_title,
+        a.address as a_address,
+        a.overview as a_overview,
+        a.latitude as a_latitude,
+        a.longitude as a_longitude,
+        i.image_path as i_image_path
+        from attraction a
+        left outer join image_info i on a.id = i.attraction_id
+        where a.id = #{attractionId}
+        and i.is_representative = true
+        and a.type = #{type}
+        limit #{start}, #{sizePerPage}
+    </select>
+
     <resultMap id="AttractionListMap" type="Attraction">
         <id column="a_id" property="id"/>
         <result column="a_title" property="title"/>
         <result column="a_address" property="address"/>
         <result column="a_overview" property="overview"/>
         <result column="main_image_path" property="mainImagePath"/>
+    </resultMap>
+
+    <resultMap id="AttractionMap" type="Attraction">
+        <id column="a_id" property="id"/>
+        <result column="a_type" property="type"/>
+        <result column="a_title" property="title"/>
+        <result column="a_address" property="address"/>
+        <result column="a_overview" property="overview"/>
+        <result column="a_latitude" property="latitude"/>
+        <result column="a_longitude" property="longitude"/>
+        <result column="i_image_path" property="mainImagePath"/>
+    </resultMap>
+
+    <resultMap id="InterestListMap" type="Attraction">
+        <id column="a_id" property="id"/>
+        <result column="a_type" property="type"/>
+        <result column="a_title" property="title"/>
+        <result column="a_address" property="address"/>
+        <result column="a_overview" property="overview"/>
+        <result column="i_image_path" property="mainImagePath"/>
     </resultMap>
 </mapper>

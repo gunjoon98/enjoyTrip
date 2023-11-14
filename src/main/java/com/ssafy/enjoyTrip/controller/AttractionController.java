@@ -39,4 +39,10 @@ public class AttractionController {
         List<Attraction> attractions = attractionService.getAttracionList(map);
         return ResponseEntity.ok().body(attractions);
     }
+
+    @GetMapping("/map/attraction/{id}")
+    public ResponseEntity<?> getAttraction(@PathVariable("id") int attractionId) {
+        Attraction attraction = attractionService.getAttraction(attractionId);
+        return ResponseEntity.ok().body(attraction);
+    }
 }

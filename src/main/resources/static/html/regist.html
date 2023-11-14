@@ -6,7 +6,7 @@
     <title>등록 테스트</title>
 </head>
 <body>
-<form method="POST" enctype="multipart/form-data" action="/api/admin/attraction">
+<form id="registForm" enctype="multipart/form-data" >
     <label>타입 : </label>
     <input type="text" name="type" /><br />
     <label>명소 명 : </label>
@@ -33,5 +33,24 @@
     <input type="file" name="images" multiple="multiple" /><br />
     <button>등록</button>
 </form>
+<script>
+    let registForm = document.getElementById("registForm");
+    let url = "http://localhost/api/admin/attraction";
+    registForm.onsubmit =(e)=> {
+        e.preventDefault();
+        const formData = new FormData(registForm);
+        const config = {
+            method:"post",
+            body:formData
+        }
+        fetch(url, config)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.text();
+        })
+    }
+</script>
 </body>
 </html>

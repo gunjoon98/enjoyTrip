@@ -10,5 +10,9 @@ public interface AttractionMapper {
     List<Keyword> getKeywordList();
     List<Map<String, Object>> getcityList();
     List<Attraction> getAttractionList(Map<String, Object> map);
+    Attraction getAttraction(int attractionId);
+    List<Attraction> getInterestList(int attractionId);
+    int registerInterest(Map<String, Object> map);
+    int deleteInterest(int attractionId);
 }
 

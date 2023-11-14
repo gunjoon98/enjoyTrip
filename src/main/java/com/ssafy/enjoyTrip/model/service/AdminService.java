@@ -40,7 +40,9 @@ public class AdminService {
     @Transactional
     public void registerAttraction(Attraction attraction, MultipartFile mainImage, List<MultipartFile> images) {
         adminMapper.registerAttraction(attraction);
-        adminMapper.registerKeywordMatch(attraction);
+        if(attraction.getKeywordCodes() != null && !attraction.getKeywordCodes().isEmpty()) {
+            adminMapper.registerKeywordMatch(attraction);
+        }
 
         List<ImageInfo> imageInfos = new ArrayList<>();
 

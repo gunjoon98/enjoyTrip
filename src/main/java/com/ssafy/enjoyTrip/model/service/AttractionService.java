@@ -26,4 +26,16 @@ public class AttractionService {
     public List<Attraction> getAttracionList(Map<String, Object> map) {
         return attractionMapper.getAttractionList(map);
     }
+
+    public Attraction getAttraction(int attractionId) {
+        return attractionMapper.getAttraction(attractionId);
+    }
+
+    public void registerInterest(Map<String, Object> map) {
+        attractionMapper.registerInterest(map);
+    }
+
+    public void deleteInterest(int attractionId) {
+        attractionMapper.deleteInterest(attractionId);
+    }
 }
