@@ -5,7 +5,10 @@
 <mapper namespace="com.ssafy.enjoyTrip.model.mapper.AttractionMapper">
     <select id="getKeywordList" resultType="Keyword">
         select code, keyword
-        from keyword_info
+        from keyword_info ki
+        inner join keyword_count kc on ki.code = kc.keyword_code
+        group by ki.code
+        order by sum(kc.count);
     </select>
 
     <select id="getcityList" resultType="Map">
@@ -39,6 +42,23 @@
         order by a.id desc
         limit #{column}
     </select>
+
+    <select id="keywordCount" parameterType="Map" resultType="int">
+        select keyword_code
+        from keyword_count
+        where keyword_code = #{keywordCode} and search_date = #{searchDate}
+    </select>
+
+    <insert id="registerKeywordCount" parameterType="int">
+        insert into keyword_count (keyword_code)
+        values (#{keywordCode})
+    </insert>
+
+    <update id="updateKeywordCount" parameterType="">
+        update keyword_count
+        set count = count + 1
+        where keyword_code = #{keywordCode} and search_date = #{searchDate}
+    </update>
 
     <select id="getAttraction" parameterType="int" resultMap="AttractionMap">
         select

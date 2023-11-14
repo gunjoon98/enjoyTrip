@@ -3,6 +3,7 @@ package com.ssafy.enjoyTrip.controller;
 import com.ssafy.enjoyTrip.model.dto.Attraction;
 import com.ssafy.enjoyTrip.model.dto.Keyword;
 import com.ssafy.enjoyTrip.model.service.AttractionService;
+import com.sun.javaws.IconUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,8 @@ public class AttractionController {
     }
 
     @GetMapping("/keyword/attractions")
-    public ResponseEntity<?> getAttractionList(@RequestParam List<Integer> keywordCodes, @RequestParam int cityCode,
-                                               @RequestParam int column) {
+    public ResponseEntity<?> getAttractionList(@RequestParam(required = false) List<Integer> keywordCodes, @RequestParam Integer cityCode,
+                                               @RequestParam Integer column) {
         Map<String, Object> map = new HashMap<>();
         map.put("keywordCodes", keywordCodes);
         map.put("cityCode", cityCode);
