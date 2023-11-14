@@ -30,6 +30,7 @@ public class AdminController {
 
     @PostMapping("/attraction")
     public ResponseEntity<?> registerAttraction(@ModelAttribute Attraction attraction, @RequestParam MultipartFile mainImage, @RequestParam List<MultipartFile> images) {
+        System.out.println(attraction);
         adminService.registerAttraction(attraction, mainImage, images);
         return ResponseEntity.ok().build();
     }

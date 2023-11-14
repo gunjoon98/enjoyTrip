@@ -18,8 +18,8 @@ public class FileDaoImpl implements FileDao {
         uploadPath += "/src/main/resources/static/image";
     }
 
-    public void fileSave(MultipartFile mfile, String folderName, String fileName) {
-        Path path = Paths.get(uploadPath + '/' + folderName + '/' + fileName);
+    public void fileSave(MultipartFile mfile, String fileName) {
+        Path path = Paths.get(uploadPath + '/' +  fileName);
         try{
             mfile.transferTo(path);
         } catch (IOException ioException) {

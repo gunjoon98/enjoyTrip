@@ -5,10 +5,9 @@ import com.ssafy.enjoyTrip.model.dto.Keyword;
 import com.ssafy.enjoyTrip.model.service.AttractionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,15 +22,21 @@ public class AttractionController {
         return ResponseEntity.ok().body(keywords);
     }
 
-    @GetMapping("/sido")
-    public ResponseEntity<?> getSidoList() {
-        List<Map<String, Object>> sidos = attractionService.getSidoList();
-        return ResponseEntity.ok().body(sidos);
+    @GetMapping("/cities")
+    public ResponseEntity<?> getCityList() {
+        List<Map<String, Object>> cities = attractionService.getcityList();
+        return ResponseEntity.ok().body(cities);
     }
 
     @GetMapping("/keyword/attractions")
-    public ResponseEntity<?> getAttractionList(@RequestBody Map<String, Object> map) {
-        List<Attraction> attractions = attractionService.getAttractionList(map);
+    public ResponseEntity<?> getAttractionList(@RequestParam List<Integer> keywordCodes, @RequestParam int cityCode,
+                                               @RequestParam int column) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("keywordCodes", keywordCodes);
+        map.put("cityCode", cityCode);
+        map.put("column", column);
+
+        List<Attraction> attractions = attractionService.getAttracionList(map);
         return ResponseEntity.ok().body(attractions);
     }
 }

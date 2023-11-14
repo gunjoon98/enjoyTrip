@@ -2,29 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ssafy.enjoyTrip.model.mapper.AttracionMapper">
+<mapper namespace="com.ssafy.enjoyTrip.model.mapper.AttractionMapper">
     <select id="getKeywordList" resultType="Keyword">
         select code, keyword
         from keyword_info
     </select>
 
-    <select id="getSidoList" resultMap="sidoListMap">
-        select
-        s.sido_code as s_sido_code,
-        s.sido_name as s_sido_name,
-        g.gugun_code as g_gugun_code,
-        g.gugun_name as g_gugun_name
-        from sido s
-        inner join gugun g on s.sido_code = g.sido_code
+    <select id="getcityList" resultType="Map">
+        select code, name as name
+        from city
     </select>
-    
-    <select id="getAttractionList" parameterType="Map" resultMap="AttractionMap">
+
+    <select id="getAttractionList" parameterType="Map" resultMap="AttractionListMap">
         select
         a.id as a_id,
         a.title as a_title,
         a.address as a_address,
         a.overview as a_overview,
-        CONCAT('/', i.folder_name, '/', i.image_name) as main_image_path
+        i.image_path as main_image_path
         from attraction a
         left outer join keyword_match km on a.id = km.attraction_id
         inner join keyword_info k on km.keyword_code = k.code
@@ -36,11 +31,8 @@
                 #{item}
             </foreach>
         </if>
-        <if test="sidoCode != null">
-            and a.sidoCode = #{sidoCode}
-        </if>
-        <if test="gugunCode != null">
-            and a.gugunCode = #{gugunCode}
+        <if test="cityCode != null">
+            and a.city_code = #{cityCode}
         </if>
         and i.is_representative = true
         </where>
@@ -48,12 +40,11 @@
         limit #{column}
     </select>
 
-    <resultMap id="sidoListMap" type="Map">
-        <id column="s_sido_code" property="sidoCode"/>
-        <result column="s_sido_name" property="sidoName"/>
-        <collection property="gugunList" ofType="Map" javaType="List">
-            <id column="g_gugun_code" property="gugunCode"/>
-            <result column="g_gugun_name" property="gugunName"/>
-        </collection>
+    <resultMap id="AttractionListMap" type="Attraction">
+        <id column="a_id" property="id"/>
+        <result column="a_title" property="title"/>
+        <result column="a_address" property="address"/>
+        <result column="a_overview" property="overview"/>
+        <result column="main_image_path" property="mainImagePath"/>
     </resultMap>
 </mapper>

@@ -9,7 +9,7 @@ import java.util.Map;
 public interface AdminMapper {
     List<Attraction> getAttractionList(Map<String, Object> map);
     Attraction getAttraction(int attractionId);
-    int updateAttraction(Attraction attraction);
+    //int updateAttraction(Attraction attraction);
     //int deleteAttraction(String attractionId);
     //int deleteImage(String imageId);
     int registerAttraction(Attraction attraction);

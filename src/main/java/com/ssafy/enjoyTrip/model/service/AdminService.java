@@ -16,18 +16,12 @@ public class AdminService {
     private final AdminMapper adminMapper;
     private final FileDao fileDao;
     //후에 전역 변수로 설정 필요
-    private final Map<Integer, String> folderMap;
     private final int sizePerPage = 12;
 
     @Autowired
     public AdminService(AdminMapper adminMapper, FileDao fileDao) {
         this.adminMapper = adminMapper;
         this.fileDao = fileDao;
-
-        folderMap = new HashMap<>();
-        folderMap.put(12, "tourlistSpots");
-        folderMap.put(32, "accommodation");
-        folderMap.put(39, "restaurant");
     }
 
     public List<Attraction> getAttractionList(Map<String, Object> map) {
@@ -51,32 +45,29 @@ public class AdminService {
         List<ImageInfo> imageInfos = new ArrayList<>();
 
         ImageInfo imageInfo = new ImageInfo();
-        String folderName = folderMap.get(attraction.getType());
-        String originalImageName = mainImage.getOriginalFilename();
-        String imageName = UUID.randomUUID() +
-                originalImageName.substring(originalImageName.lastIndexOf('.'));
-
+        String imageName = mainImage.getOriginalFilename();
+        String createdName = UUID.randomUUID() +
+                imageName.substring(imageName.lastIndexOf('.'));
+        String imagePath = "/image/" + createdName;
         imageInfo.setAttractionId(attraction.getId());
-        imageInfo.setFolderName(folderName);
-        imageInfo.setOriginalImageName(originalImageName);
-        imageInfo.setImageName(imageName);
         imageInfo.setRepresentative(true);
+        imageInfo.setImageName(imageName);
+        imageInfo.setImagePath(imagePath);
         imageInfos.add(imageInfo);
-        fileDao.fileSave(mainImage, folderName, imageName);
+        fileDao.fileSave(mainImage, createdName);
 
         for(MultipartFile image : images) {
-            originalImageName = image.getOriginalFilename();
-            imageName = UUID.randomUUID() +
-                    originalImageName.substring(originalImageName.lastIndexOf('.'));
-
             imageInfo = new ImageInfo();
+            imageName = image.getOriginalFilename();
+            createdName = UUID.randomUUID() +
+                    imageName.substring(imageName.lastIndexOf('.'));
+            imagePath = "/image/" + createdName;
             imageInfo.setAttractionId(attraction.getId());
-            imageInfo.setFolderName(folderName);
-            imageInfo.setOriginalImageName(originalImageName);
-            imageInfo.setImageName(imageName);
             imageInfo.setRepresentative(false);
+            imageInfo.setImageName(imageName);
+            imageInfo.setImagePath(imagePath);
             imageInfos.add(imageInfo);
-            fileDao.fileSave(image, folderName, imageName);
+            fileDao.fileSave(image, createdName);
         }
 
         adminMapper.registerImageInfo(imageInfos);

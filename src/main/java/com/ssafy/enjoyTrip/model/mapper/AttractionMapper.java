@@ -9,6 +9,6 @@ import java.util.Map;
 public interface AttractionMapper {
     List<Keyword> getKeywordList();
     List<Map<String, Object>> getcityList();
-    //List<Attraction> getAttractionList(Map<String, Object> map);
+    List<Attraction> getAttractionList(Map<String, Object> map);
 }
 
