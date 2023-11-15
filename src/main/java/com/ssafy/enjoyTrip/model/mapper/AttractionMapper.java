@@ -9,10 +9,16 @@ import java.util.Map;
 public interface AttractionMapper {
     List<Keyword> getKeywordList();
     List<Map<String, Object>> getcityList();
-    List<Attraction> getAttractionList(Map<String, Object> map);
+    List<Attraction> getAttractionListByKeyword(Map<String, Object> map);
     Attraction getAttraction(int attractionId);
-    List<Attraction> getInterestList(int attractionId);
+    List<Attraction> getAttractionMapList(Map<String, Object> map);
+    List<Attraction> getAttractionMapListByUser(Map<String, Object> map);
+    List<Attraction> getInterestList(String userId);
+    Integer getKeywordCount(Map<String, Object> map);
+    String getInterest(Map<String, Object> map);
+    int registerKeywordCount(int keywordCode);
+    int updateKeywordCount(Map<String, Object> map);
     int registerInterest(Map<String, Object> map);
-    int deleteInterest(int attractionId);
+    int deleteInterest(Map<String, Object> map);
 }
 

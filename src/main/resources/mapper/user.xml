@@ -5,7 +5,7 @@
 <mapper namespace="com.ssafy.enjoyTrip.model.mapper.UserMapper">
 
     <select id="login" parameterType="User" resultType="User">
-        select id, pw
+        select id, pw, role
         from user
         where id=#{id} and pw=#{pw} and is_remove=false
     </select>

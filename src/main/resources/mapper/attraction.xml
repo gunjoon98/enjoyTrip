@@ -7,8 +7,9 @@
         select code, keyword
         from keyword_info ki
         inner join keyword_count kc on ki.code = kc.keyword_code
+        where kc.search_date between DATE_SUB(CURDATE(), INTERVAL 1 MONTH) and DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
         group by ki.code
-        order by sum(kc.count);
+        order by sum(kc.count) desc;
     </select>
 
     <select id="getcityList" resultType="Map">
@@ -16,7 +17,7 @@
         from city
     </select>
 
-    <select id="getAttractionList" parameterType="Map" resultMap="AttractionListMap">
+    <select id="getAttractionListByKeyword" parameterType="Map" resultMap="AttractionListMap">
         select
         distinct a.id as a_id,
         a.title as a_title,
@@ -28,22 +29,20 @@
         inner join keyword_info k on km.keyword_code = k.code
         left outer join image_info i on a.id = i.attraction_id
         <where>
-        <if test="kewordCodes != null">
+        <if test="!keywordCodes.isEmpty()">
             and k.code in
             <foreach collection="keywordCodes" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>
-        <if test="cityCode != null">
-            and a.city_code = #{cityCode}
-        </if>
+        and a.city_code = #{cityCode}
         and i.is_representative = true
         </where>
         order by a.id desc
         limit #{column}
     </select>
 
-    <select id="keywordCount" parameterType="Map" resultType="int">
+    <select id="getKeywordCount" parameterType="Map" resultType="Integer">
         select keyword_code
         from keyword_count
         where keyword_code = #{keywordCode} and search_date = #{searchDate}
@@ -54,7 +53,7 @@
         values (#{keywordCode})
     </insert>
 
-    <update id="updateKeywordCount" parameterType="">
+    <update id="updateKeywordCount" parameterType="Map">
         update keyword_count
         set count = count + 1
         where keyword_code = #{keywordCode} and search_date = #{searchDate}
@@ -75,30 +74,6 @@
         where a.id = #{attractionId} and i.is_representative = true
     </select>
 
-    <insert id="registerInterest" parameterType="Map">
-        insert into interest_attraction (user_id, attraction_id)
-        values (#{userId}, #{attractionId})
-    </insert>
-
-    <delete id="deleteInterest" parameterType="Map">
-        delete from interest_attraction
-        where user_id = #{user_id} and attraction_id = #{attractionId}
-    </delete>
-    
-    <select id="getInterestList" parameterType="int" resultMap="InterestListMap">
-        select
-        a.id as a_id,
-        a.type as a_type,
-        a.title as a_title,
-        a.address as a_address,
-        a.overview as a_overview,
-        i.image_path as i_image_path
-        from interest_attraction ia
-        inner join attraction a on ia.attraction_id = a.id
-        left outer join image_info i on a.id = i.attraction_id
-        where ia.user_id = #{userId}
-    </select>
-
     <select id="getAttractionMapList" parameterType="Map" resultMap="AttractionMap">
         select
         a.id as a_id,
@@ -111,10 +86,66 @@
         i.image_path as i_image_path
         from attraction a
         left outer join image_info i on a.id = i.attraction_id
-        where a.id = #{attractionId}
-        and i.is_representative = true
+        where i.is_representative = true
         and a.type = #{type}
+        and a.city_code = #{cityCode}
+        <if test="title.length() != 0">
+            and a.title like CONCAT('%', #{title}, '%')
+        </if>
         limit #{start}, #{sizePerPage}
+    </select>
+
+    <select id="getAttractionMapListByUser" parameterType="Map" resultMap="AttractionListByUserMap">
+        select
+        a.id as a_id,
+        a.type as a_type,
+        a.title as a_title,
+        a.address as a_address,
+        a.overview as a_overview,
+        a.latitude as a_latitude,
+        a.longitude as a_longitude,
+        i.image_path as i_image_path,
+        if(ia.user_id=#{userId}, true, false) as interest
+        from attraction a
+        left outer join image_info i on a.id = i.attraction_id
+        left outer join interest_attraction ia on a.id = ia.attraction_id
+        where i.is_representative = true
+        and a.type = #{type}
+        and a.city_code = #{cityCode}
+        <if test="title.length() != 0">
+            and a.title like CONCAT('%', #{title}, '%')
+        </if>
+        limit #{start}, #{sizePerPage}
+    </select>
+
+    <select id="getInterest" parameterType="Map" resultType="String">
+        select user_id
+        from interest_attraction
+        where user_id=#{userId} and attraction_id=#{attractionId}
+    </select>
+
+    <insert id="registerInterest" parameterType="Map">
+        insert into interest_attraction (user_id, attraction_id)
+        values (#{userId}, #{attractionId})
+    </insert>
+
+    <delete id="deleteInterest" parameterType="Map">
+        delete from interest_attraction
+        where user_id = #{userId} and attraction_id = #{attractionId}
+    </delete>
+
+    <select id="getInterestList" parameterType="String" resultMap="InterestListMap">
+        select
+        a.id as a_id,
+        a.type as a_type,
+        a.title as a_title,
+        a.address as a_address,
+        a.overview as a_overview,
+        i.image_path as i_image_path
+        from interest_attraction ia
+        inner join attraction a on ia.attraction_id = a.id
+        left outer join image_info i on a.id = i.attraction_id
+        where i.is_representative = true and ia.user_id = #{userId}
     </select>
 
     <resultMap id="AttractionListMap" type="Attraction">
@@ -134,6 +165,18 @@
         <result column="a_latitude" property="latitude"/>
         <result column="a_longitude" property="longitude"/>
         <result column="i_image_path" property="mainImagePath"/>
+    </resultMap>
+
+    <resultMap id="AttractionListByUserMap" type="Attraction">
+        <id column="a_id" property="id"/>
+        <result column="a_type" property="type"/>
+        <result column="a_title" property="title"/>
+        <result column="a_address" property="address"/>
+        <result column="a_overview" property="overview"/>
+        <result column="a_latitude" property="latitude"/>
+        <result column="a_longitude" property="longitude"/>
+        <result column="i_image_path" property="mainImagePath"/>
+        <result column="interest" property="interest"/>
     </resultMap>
 
     <resultMap id="InterestListMap" type="Attraction">

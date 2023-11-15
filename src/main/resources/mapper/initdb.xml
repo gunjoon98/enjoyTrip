@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper>
+    <insert id="registerAttraction">
+        insert into (type, title, address, overview, latitude, longitude, city_code)
+        values (#{type}, #{title}, #{address}, #{overview}, #{latitude}, #{longitude}, #{cityCode})
+    </insert>
+
+    <insert id="registerImageInfo">
+        insert into (attraction_id, image_name, image_path, is_representative)
+        values (#{attractionId}, #{imageName}, )
+    </insert>
+</mapper>

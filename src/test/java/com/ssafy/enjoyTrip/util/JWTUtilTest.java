@@ -8,7 +8,6 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 
-import static com.ssafy.enjoyTrip.util.JWTUtil.decodeToken;
 import static com.ssafy.enjoyTrip.util.JWTUtil.validateToken;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,14 +17,15 @@ class JWTUtilTest {
         User user = new User();
         user.setId("ssafy");
         user.setPw("ssafy");
+        user.setRole("user");
 
         //토큰 생성
         String token = JWTUtil.generateToken(user);
         System.out.println("생성된 토큰 : " + token);
 
         //토큰 디코딩
-        String decoded = decodeToken(token);
-        System.out.println("디코딩된 토큰 : " + decoded);
+        String id = JWTUtil.GetUserIdByToken(token);
+        System.out.println("유저 id : " + id);
 
         //유효성 검증
         try {

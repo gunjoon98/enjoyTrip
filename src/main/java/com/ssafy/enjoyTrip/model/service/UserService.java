@@ -19,7 +19,7 @@ public class UserService {
 
         if(loginUser == null) return null;
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("token", loginUser);
+        responseMap.put("token", JWTUtil.generateToken(loginUser));
         return responseMap;
     }
 

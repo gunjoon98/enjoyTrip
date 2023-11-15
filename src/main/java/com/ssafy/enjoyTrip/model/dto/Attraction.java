@@ -22,6 +22,7 @@ public class Attraction {
     private Double latitude;
     private Double longitude;
     private String mainImagePath;
+    private Boolean interest;
     private List<Integer> keywordCodes;
     private List<Keyword> keywords;
     private List<ImageInfo> imageInfos;
