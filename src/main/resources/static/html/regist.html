@@ -36,11 +36,15 @@
 <script>
     let registForm = document.getElementById("registForm");
     let url = "http://localhost/api/admin/attraction";
+    const headers = new Headers();
+    headers.append('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzAwMTE5MTYxfQ.Oliz0_O7mXnG3ttT7fqdMH4BhkfdiAVCF9VdKZqJcKE');
+
     registForm.onsubmit =(e)=> {
         e.preventDefault();
         const formData = new FormData(registForm);
         const config = {
             method:"post",
+            headers,
             body:formData
         }
         fetch(url, config)

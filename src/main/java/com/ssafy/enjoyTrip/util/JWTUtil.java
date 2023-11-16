@@ -15,11 +15,10 @@ import java.util.Map;
 
 public class JWTUtil {
     private static final String SECRET_KEY = "ssafy";
-    private static final long EXPIRATION_SECOND = 60 * 60 * 2;
+    private static final long EXPIRATION_SECOND = 60 * 60 * 2; //2시간
 
     public static String generateToken(User user) {
         long now = System.currentTimeMillis();
-        long expirationSecond = 60 * 60 * 2; //2시간
 
         Claims claims = Jwts.claims();
         claims.put("id", user.getId());
@@ -29,7 +28,7 @@ public class JWTUtil {
         //토큰 생성
         return Jwts.builder()
                 .setClaims(claims)
-                .setExpiration(new Date(now + 1000 * expirationSecond))
+                .setExpiration(new Date(now + 1000 * EXPIRATION_SECOND))
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
                 .compact();
     }
@@ -40,13 +39,12 @@ public class JWTUtil {
                 .parseClaimsJws(token);
     }
 
-    public static String GetUserIdByToken(String token) {
+    public static String getUserId(String token) {
         Base64.Decoder decoder = Base64.getDecoder();
         String[] splitToken = token.split("\\.");
         String json = new String(decoder.decode(splitToken[1]));
 
         ObjectMapper objectMapper = new ObjectMapper();
-
         try {
             Map<String, Object> map = objectMapper.readValue(json, Map.class);
             return (String) map.get("id");

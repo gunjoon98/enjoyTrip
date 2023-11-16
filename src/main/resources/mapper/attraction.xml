@@ -6,8 +6,7 @@
     <select id="getKeywordList" resultType="Keyword">
         select code, keyword
         from keyword_info ki
-        inner join keyword_count kc on ki.code = kc.keyword_code
-        where kc.search_date between DATE_SUB(CURDATE(), INTERVAL 1 MONTH) and DATE_ADD(CURDATE(), INTERVAL 1 MONTH)
+        left outer join keyword_count kc on ki.code = kc.keyword_code
         group by ki.code
         order by sum(kc.count) desc;
     </select>
@@ -59,7 +58,7 @@
         where keyword_code = #{keywordCode} and search_date = #{searchDate}
     </update>
 
-    <select id="getAttraction" parameterType="int" resultMap="AttractionMap">
+    <select id="getAttraction" parameterType="int" resultMap="AttractionDetailMap">
         select
         a.id as a_id,
         a.type as a_type,
@@ -68,10 +67,13 @@
         a.overview as a_overview,
         a.latitude as a_latitude,
         a.longitude as a_longitude,
-        i.image_path as i_image_path
+        i.id as i_id,
+        i.image_path as i_image_path,
+        i.image_name as i_image_name,
+        i.is_representative as i_is_representative
         from attraction a
         left outer join image_info i on a.id = i.attraction_id
-        where a.id = #{attractionId} and i.is_representative = true
+        where a.id = #{attractionId}
     </select>
 
     <select id="getAttractionMapList" parameterType="Map" resultMap="AttractionMap">
@@ -154,6 +156,22 @@
         <result column="a_address" property="address"/>
         <result column="a_overview" property="overview"/>
         <result column="main_image_path" property="mainImagePath"/>
+    </resultMap>
+
+    <resultMap id="AttractionDetailMap" type="Attraction">
+        <id column="a_id" property="id"/>
+        <result column="a_type" property="type"/>
+        <result column="a_title" property="title"/>
+        <result column="a_address" property="address"/>
+        <result column="a_overview" property="overview"/>
+        <result column="a_latitude" property="latitude"/>
+        <result column="a_longitude" property="longitude"/>
+        <collection property="imageInfos" ofType="ImageInfo" javaType="List">
+            <id column="i_id" property="id"/>
+            <result column="i_image_path" property="imagePath"/>
+            <result column="i_image_name" property="imageName"/>
+            <result column="i_is_representative" property="representative"/>
+        </collection>
     </resultMap>
 
     <resultMap id="AttractionMap" type="Attraction">

@@ -17,7 +17,7 @@
         k.code as k_code,
         i.id as i_id,
         i.image_path as i_image_path,
-        i.image_name as i_original_image_name,
+        i.image_name as i_image_name,
         i.is_representative as i_is_representative
         from attraction a
         left outer join keyword_match km on a.id = km.attraction_id

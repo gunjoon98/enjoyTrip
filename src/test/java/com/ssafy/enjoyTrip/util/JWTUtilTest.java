@@ -24,7 +24,7 @@ class JWTUtilTest {
         System.out.println("생성된 토큰 : " + token);
 
         //토큰 디코딩
-        String id = JWTUtil.GetUserIdByToken(token);
+        String id = JWTUtil.getUserId(token);
         System.out.println("유저 id : " + id);
 
         //유효성 검증

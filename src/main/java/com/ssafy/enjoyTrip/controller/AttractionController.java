@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,14 +75,13 @@ public class AttractionController {
         }
 
         //로그인 O
-        map.put("userId", JWTUtil.GetUserIdByToken(token));
+        map.put("userId", JWTUtil.getUserId(token));
         return ResponseEntity.ok().body(attractionService.getAttractionMapListByUser(map));
     }
 
     @GetMapping("/interests")
     public List<Attraction> getInterestList(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String userId = JWTUtil.GetUserIdByToken(token);
+        String userId = (String) request.getAttribute("userId");
         return attractionService.getInterestList(userId);
     }
 
@@ -91,11 +89,9 @@ public class AttractionController {
     public ResponseEntity<?> registerInterest(@RequestBody Map<String, Object> map, HttpServletRequest request) {
         if(map.get("attractionId") == null) return ResponseEntity.badRequest().build();
 
-        String token = request.getHeader("Authorization");
-        String userId = JWTUtil.GetUserIdByToken(token);
         Map<String, Object> params = new HashMap<>();
         params.put("attractionId", map.get("attractionId"));
-        params.put("userId", userId);
+        params.put("userId", request.getAttribute("userId"));
 
         attractionService.registerInterest(params);
         return ResponseEntity.ok().build();
@@ -103,11 +99,9 @@ public class AttractionController {
 
     @DeleteMapping("/interest/{id}")
     public ResponseEntity<?> deleteInterest(@PathVariable("id") int attractionId, HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        String userId = JWTUtil.GetUserIdByToken(token);
         Map<String, Object> params = new HashMap<>();
         params.put("attractionId", attractionId);
-        params.put("userId", userId);
+        params.put("userId", request.getAttribute("userId"));
 
         attractionService.deleteInterest(params);
         return ResponseEntity.ok().build();
