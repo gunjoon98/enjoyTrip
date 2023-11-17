@@ -7,6 +7,7 @@ import com.ssafy.enjoyTrip.model.mapper.AdminMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -73,5 +74,14 @@ public class AdminService {
         }
 
         adminMapper.registerImageInfo(imageInfos);
+    }
+
+    @Transactional
+    public void updateAttraction(Attraction attraction, MultipartFile mainImage,
+                                 List<MultipartFile> images, List<Integer> deleteImages) {
+        //1. attraction 수정
+        //2. mainImage 저장, images 저장 -> imageImage 변경(DB 변경, 파일 삭제)
+        //3. images 등록
+        //4. deleteImages 삭제 ->
     }
 }

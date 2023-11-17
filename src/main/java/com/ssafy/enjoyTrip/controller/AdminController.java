@@ -36,6 +36,7 @@ public class AdminController {
     @PostMapping("/attraction")
     public ResponseEntity<?> registerAttraction(@ModelAttribute Attraction attraction, @RequestParam MultipartFile mainImage,
                                                 @RequestParam List<MultipartFile> images) {
+
         if(mainImage.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
@@ -57,6 +58,17 @@ public class AdminController {
     @PutMapping("/attraction/{id}")
     public ResponseEntity<?> updateAttraction(@ModelAttribute Attraction attraction, @RequestParam MultipartFile mainImage,
                                               @RequestParam List<MultipartFile> images, @RequestParam List<Integer> deleteImages) {
+
+        List<MultipartFile> existImageList = new ArrayList<>();
+        for(MultipartFile image : images) {
+            if(!image.isEmpty()) existImageList.add(image);
+        }
+
+        List<Integer> keywordCoses = attraction.getKeywordCodes();
+        for(int i = keywordCoses.size()-1; i>=0; i--) {
+            if(keywordCoses.get(i) == null) keywordCoses.remove(i);
+        }
+
         return ResponseEntity.ok().build();
     }
 }

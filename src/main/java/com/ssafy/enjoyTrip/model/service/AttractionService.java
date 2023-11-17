@@ -36,6 +36,7 @@ public class AttractionService {
             Map<String, Object> params = new HashMap<>();
             params.put("keywordCode", code);
             params.put("searchDate", dateTime);
+            System.out.println("테스트 " + attractionMapper.getKeywordCount(params));
             if(attractionMapper.getKeywordCount(params) == null) {
                 attractionMapper.registerKeywordCount(code);
             }
