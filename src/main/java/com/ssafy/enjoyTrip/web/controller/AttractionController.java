@@ -1,4 +1,4 @@
-package com.ssafy.enjoyTrip.controller;
+package com.ssafy.enjoyTrip.web.controller;
 
 import com.ssafy.enjoyTrip.model.dto.Attraction;
 import com.ssafy.enjoyTrip.model.dto.Keyword;

@@ -1,4 +1,4 @@
-package com.ssafy.enjoyTrip.filter;
+package com.ssafy.enjoyTrip.web.filter;
 
 import com.ssafy.enjoyTrip.util.JWTUtil;
 

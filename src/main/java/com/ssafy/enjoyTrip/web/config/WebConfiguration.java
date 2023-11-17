@@ -1,16 +1,14 @@
-package com.ssafy.enjoyTrip.config;
+package com.ssafy.enjoyTrip.web.config;
 
-import com.ssafy.enjoyTrip.filter.LoginFilter;
+import com.ssafy.enjoyTrip.web.filter.LoginFilter;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
-import java.util.Arrays;
 
 
 @Configuration
