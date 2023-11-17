@@ -22,6 +22,8 @@
         a.title as a_title,
         a.address as a_address,
         a.overview as a_overview,
+        a.latitude as a_latitude,
+        a.longitude as a_longitude,
         i.image_path as main_image_path
         from attraction a
         left outer join keyword_match km on a.id = km.attraction_id
@@ -91,6 +93,7 @@
         where i.is_representative = true
         and a.type = #{type}
         and a.city_code = #{cityCode}
+        and a.id != #{exceptId}
         <if test="title.length() != 0">
             and a.title like CONCAT('%', #{title}, '%')
         </if>
@@ -114,6 +117,7 @@
         where i.is_representative = true
         and a.type = #{type}
         and a.city_code = #{cityCode}
+        and a.id != #{exceptId}
         <if test="title.length() != 0">
             and a.title like CONCAT('%', #{title}, '%')
         </if>
@@ -155,6 +159,8 @@
         <result column="a_title" property="title"/>
         <result column="a_address" property="address"/>
         <result column="a_overview" property="overview"/>
+        <result column="a_latitude" property="latitude"/>
+        <result column="a_longitude" property="longitude"/>
         <result column="main_image_path" property="mainImagePath"/>
     </resultMap>
 

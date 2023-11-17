@@ -56,6 +56,7 @@ public class AttractionService {
         params.put("type", map.get("type"));
         params.put("cityCode", map.get("cityCode"));
         params.put("title", map.get("title"));
+        params.put("exceptId", map.get("exceptId"));
         return attractionMapper.getAttractionMapList(params);
     }
 
@@ -67,6 +68,7 @@ public class AttractionService {
         params.put("cityCode", map.get("cityCode"));
         params.put("title", map.get("title"));
         params.put("userId", map.get("userId"));
+        params.put("exceptId", map.get("exceptId"));
         return attractionMapper.getAttractionMapListByUser(params);
     }
 
