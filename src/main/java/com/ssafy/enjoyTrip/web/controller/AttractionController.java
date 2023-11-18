@@ -53,14 +53,14 @@ public class AttractionController {
 
     @GetMapping("/map/attractions")
     public ResponseEntity<?> getAttractionMapList(@RequestParam Integer type, @RequestParam Integer page, @RequestParam Integer cityCode,
-                                                  @RequestParam(required = false) String title, @RequestParam Integer exceptId, HttpServletRequest httpRequest) {
+                                                  @RequestParam(required = false) String title, @RequestParam List<Integer> exceptIdList, HttpServletRequest httpRequest) {
         if(title == null) title = "";
         Map<String, Object> map = new HashMap<>();
         map.put("type", type);
         map.put("page", page);
         map.put("cityCode", cityCode);
         map.put("title", title);
-        map.put("exceptId", exceptId);
+        map.put("exceptIdList", exceptIdList);
 
         String authorizationHeader = httpRequest.getHeader("Authorization");
         //로그인 X

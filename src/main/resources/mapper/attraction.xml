@@ -93,7 +93,12 @@
         where i.is_representative = true
         and a.type = #{type}
         and a.city_code = #{cityCode}
-        and a.id != #{exceptId}
+        <if test="!exceptIdList.isEmpty()">
+            and a.id not in
+            <foreach collection="exceptIdList" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         <if test="title.length() != 0">
             and a.title like CONCAT('%', #{title}, '%')
         </if>
@@ -117,7 +122,12 @@
         where i.is_representative = true
         and a.type = #{type}
         and a.city_code = #{cityCode}
-        and a.id != #{exceptId}
+        <if test="!exceptIdList.isEmpty()">
+            and a.id not in
+            <foreach collection="exceptIdList" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
         <if test="title.length() != 0">
             and a.title like CONCAT('%', #{title}, '%')
         </if>
