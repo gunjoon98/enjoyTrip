@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ssafy.enjoyTrip.model.mapper.AttractionMapper">
-    <select id="getKeywordList" resultType="Keyword">
+<mapper namespace="com.ssafy.enjoyTrip.model.user.mapper.AttractionMapper">
+    <select id="getKeywordList" resultType="KeywordResponse">
         select code, keyword
         from keyword_info ki
         left outer join keyword_count kc on ki.code = kc.keyword_code
@@ -11,12 +11,12 @@
         order by sum(kc.count) desc;
     </select>
 
-    <select id="getcityList" resultType="Map">
+    <select id="getcityList" resultType="CityResponse">
         select code, name as name
         from city
     </select>
 
-    <select id="getAttractionListByKeyword" parameterType="Map" resultMap="AttractionListMap">
+    <select id="getAttractionListByKeyword" parameterType="AttractionKeywordSearchDto" resultMap="AttractionKeywordListMap">
         select
         distinct a.id as a_id,
         a.title as a_title,
@@ -30,35 +30,19 @@
         inner join keyword_info k on km.keyword_code = k.code
         left outer join image_info i on a.id = i.attraction_id
         <where>
-        <if test="!keywordCodes.isEmpty()">
+        <if test="keywordCodes != null and !keywordCodes.isEmpty()">
             and k.code in
             <foreach collection="keywordCodes" item="item" open="(" separator="," close=")">
                 #{item}
             </foreach>
         </if>
+        and a.type = 1
         and a.city_code = #{cityCode}
         and i.is_representative = true
         </where>
         order by a.id desc
         limit #{column}
     </select>
-
-    <select id="getKeywordCount" parameterType="Map" resultType="Integer">
-        select keyword_code
-        from keyword_count
-        where keyword_code = #{keywordCode} and search_date = #{searchDate}
-    </select>
-
-    <insert id="registerKeywordCount" parameterType="int">
-        insert into keyword_count (keyword_code)
-        values (#{keywordCode})
-    </insert>
-
-    <update id="updateKeywordCount" parameterType="Map">
-        update keyword_count
-        set count = count + 1
-        where keyword_code = #{keywordCode} and search_date = #{searchDate}
-    </update>
 
     <select id="getAttraction" parameterType="int" resultMap="AttractionDetailMap">
         select
@@ -69,7 +53,6 @@
         a.overview as a_overview,
         a.latitude as a_latitude,
         a.longitude as a_longitude,
-        i.id as i_id,
         i.image_path as i_image_path,
         i.image_name as i_image_name,
         i.is_representative as i_is_representative
@@ -78,7 +61,7 @@
         where a.id = #{attractionId}
     </select>
 
-    <select id="getAttractionMapList" parameterType="Map" resultMap="AttractionMap">
+    <select id="getAttractionMapList" parameterType="AttractionSearchDto" resultMap="AttractionListMap">
         select
         a.id as a_id,
         a.type as a_type,
@@ -93,19 +76,13 @@
         where i.is_representative = true
         and a.type = #{type}
         and a.city_code = #{cityCode}
-        <if test="!exceptIdList.isEmpty()">
-            and a.id not in
-            <foreach collection="exceptIdList" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-        <if test="title.length() != 0">
+        <if test="title != null and title.length() != 0">
             and a.title like CONCAT('%', #{title}, '%')
         </if>
         limit #{start}, #{sizePerPage}
     </select>
 
-    <select id="getAttractionMapListByUser" parameterType="Map" resultMap="AttractionListByUserMap">
+    <select id="getAttractionMapListByUser" parameterType="AttractionSearchDto" resultMap="AttractionListByUserMap">
         select
         a.id as a_id,
         a.type as a_type,
@@ -122,33 +99,11 @@
         where i.is_representative = true
         and a.type = #{type}
         and a.city_code = #{cityCode}
-        <if test="!exceptIdList.isEmpty()">
-            and a.id not in
-            <foreach collection="exceptIdList" item="item" open="(" separator="," close=")">
-                #{item}
-            </foreach>
-        </if>
-        <if test="title.length() != 0">
+        <if test="title != null and title.length() != 0">
             and a.title like CONCAT('%', #{title}, '%')
         </if>
         limit #{start}, #{sizePerPage}
     </select>
-
-    <select id="getInterest" parameterType="Map" resultType="String">
-        select user_id
-        from interest_attraction
-        where user_id=#{userId} and attraction_id=#{attractionId}
-    </select>
-
-    <insert id="registerInterest" parameterType="Map">
-        insert into interest_attraction (user_id, attraction_id)
-        values (#{userId}, #{attractionId})
-    </insert>
-
-    <delete id="deleteInterest" parameterType="Map">
-        delete from interest_attraction
-        where user_id = #{userId} and attraction_id = #{attractionId}
-    </delete>
 
     <select id="getInterestList" parameterType="String" resultMap="InterestListMap">
         select
@@ -164,7 +119,40 @@
         where i.is_representative = true and ia.user_id = #{userId}
     </select>
 
-    <resultMap id="AttractionListMap" type="Attraction">
+    <select id="getKeywordCount" parameterType="KeywordCountDto" resultType="Integer">
+        select keyword_code
+        from keyword_count
+        where keyword_code = #{keywordCode} and search_date = #{searchDate}
+    </select>
+
+    <select id="getInterest" parameterType="InterestDto" resultType="String">
+        select user_id
+        from interest_attraction
+        where user_id=#{userId} and attraction_id=#{attractionId}
+    </select>
+
+    <insert id="registerKeywordCount" parameterType="int">
+        insert into keyword_count (keyword_code)
+        values (#{keywordCode})
+    </insert>
+
+    <update id="updateKeywordCount" parameterType="KeywordCountDto">
+        update keyword_count
+        set count = count + 1
+        where keyword_code = #{keywordCode} and search_date = #{searchDate}
+    </update>
+
+    <insert id="registerInterest" parameterType="InterestDto">
+        insert into interest_attraction (user_id, attraction_id)
+        values (#{userId}, #{attractionId})
+    </insert>
+
+    <delete id="deleteInterest" parameterType="InterestDto">
+        delete from interest_attraction
+        where user_id = #{userId} and attraction_id = #{attractionId}
+    </delete>
+
+    <resultMap id="AttractionKeywordListMap" type="AttractionKeywordResponse">
         <id column="a_id" property="id"/>
         <result column="a_title" property="title"/>
         <result column="a_address" property="address"/>
@@ -174,7 +162,7 @@
         <result column="main_image_path" property="mainImagePath"/>
     </resultMap>
 
-    <resultMap id="AttractionDetailMap" type="Attraction">
+    <resultMap id="AttractionDetailMap" type="AttractionDetailResponse">
         <id column="a_id" property="id"/>
         <result column="a_type" property="type"/>
         <result column="a_title" property="title"/>
@@ -182,15 +170,14 @@
         <result column="a_overview" property="overview"/>
         <result column="a_latitude" property="latitude"/>
         <result column="a_longitude" property="longitude"/>
-        <collection property="imageInfos" ofType="ImageInfo" javaType="List">
-            <id column="i_id" property="id"/>
+        <collection property="imageResponses" ofType="ImageResponse" javaType="List">
             <result column="i_image_path" property="imagePath"/>
             <result column="i_image_name" property="imageName"/>
             <result column="i_is_representative" property="representative"/>
         </collection>
     </resultMap>
 
-    <resultMap id="AttractionMap" type="Attraction">
+    <resultMap id="AttractionListMap" type="AttractionMapResponse">
         <id column="a_id" property="id"/>
         <result column="a_type" property="type"/>
         <result column="a_title" property="title"/>
@@ -201,7 +188,7 @@
         <result column="i_image_path" property="mainImagePath"/>
     </resultMap>
 
-    <resultMap id="AttractionListByUserMap" type="Attraction">
+    <resultMap id="AttractionListByUserMap" type="AttractionMapResponse">
         <id column="a_id" property="id"/>
         <result column="a_type" property="type"/>
         <result column="a_title" property="title"/>
@@ -213,7 +200,7 @@
         <result column="interest" property="interest"/>
     </resultMap>
 
-    <resultMap id="InterestListMap" type="Attraction">
+    <resultMap id="InterestListMap" type="InterestAttractionResponse">
         <id column="a_id" property="id"/>
         <result column="a_type" property="type"/>
         <result column="a_title" property="title"/>

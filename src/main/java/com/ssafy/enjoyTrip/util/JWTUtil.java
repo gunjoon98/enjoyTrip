@@ -2,7 +2,6 @@ package com.ssafy.enjoyTrip.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.enjoyTrip.model.dto.User;
 import com.ssafy.enjoyTrip.model.exception.JWTException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -17,13 +16,13 @@ public class JWTUtil {
     private static final String SECRET_KEY = "ssafy";
     private static final long EXPIRATION_SECOND = 60 * 60 * 2; //2시간
 
-    public static String generateToken(User user) {
+    public static String generateToken(String id, String pw, String role) {
         long now = System.currentTimeMillis();
 
         Claims claims = Jwts.claims();
-        claims.put("id", user.getId());
-        claims.put("name", user.getName());
-        claims.put("role", user.getRole());
+        claims.put("id", id);
+        claims.put("name", pw);
+        claims.put("role", role);
 
         //토큰 생성
         return Jwts.builder()

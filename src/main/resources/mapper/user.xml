@@ -2,20 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ssafy.enjoyTrip.model.mapper.UserMapper">
+<mapper namespace="com.ssafy.enjoyTrip.model.user.mapper.UserMapper">
 
-    <select id="login" parameterType="User" resultType="User">
+    <select id="login" parameterType="UserLoginDto" resultType="UserResponse">
         select id, pw, role
         from user
         where id=#{id} and pw=#{pw} and is_remove=false
     </select>
 
-    <insert id="register" parameterType="User">
+    <insert id="register" parameterType="UserRegisterDto">
         insert into user(id, pw, name, email, role)
         values (#{id}, #{pw}, #{name}, #{email}, #{role})
     </insert>
 
-    <update id="update" parameterType="User">
+    <update id="update" parameterType="UserUpdateDto">
         update user
         set pw=#{pw}, name=#{name}
         where id=#{id}

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.ssafy.enjoyTrip.model.mapper.AdminMapper">
+<mapper namespace="com.ssafy.enjoyTrip.model.admin.mapper.AdminMapper">
     <select id="getAttraction" parameterType="int" resultMap="AttractionMap">
         select
         a.id as a_id,
@@ -26,7 +26,7 @@
         where a.id = #{attractionId}
     </select>
 
-    <select id="getAttractionList" parameterType="Map" resultMap="AttractionListMap">
+    <select id="getAttractionList" parameterType="com.ssafy.enjoyTrip.model.admin.dto.AttractionSearchDto" resultMap="AttractionListMap">
         select
         a.id as a_id,
         a.title as a_title,
@@ -36,19 +36,19 @@
         from attraction a
         left outer join image_info i on a.id = i.attraction_id
         <where>
-        <if test="title != null">
-            and a.title like CONCAT('%', #{title}, '%')
-        </if>
-        <if test="cityCode != null">
-            and a.city_code = #{cityCode}
-        </if>
-        and i.is_representative = true
+            <if test="title != null and !title.equals('')">
+                and a.title like CONCAT('%', #{title}, '%')
+            </if>
+            <if test="cityCode != null">
+                and a.city_code = #{cityCode}
+            </if>
+            and i.is_representative = true
         </where>
         order by a.id desc
         limit #{start}, #{sizePerPage}
     </select>
 
-    <insert id="registerAttraction" parameterType="Attraction">
+    <insert id="registerAttraction" parameterType="com.ssafy.enjoyTrip.model.admin.dto.AttractionRegisterDto">
         insert into attraction (type, title, address, city_code, overview, latitude, longitude)
         values (#{type}, #{title}, #{address}, #{cityCode}, #{overview}, #{latitude}, #{longitude})
         <selectKey keyProperty="id" resultType="int" order="AFTER">
@@ -56,12 +56,12 @@
         </selectKey>
     </insert>
 
-    <insert id="registerKeywordMatch" parameterType="Attraction">
-    insert into keyword_match (attraction_id, keyword_code)
-    values
-    <foreach collection="keywordCodes" item="item" separator=",">
-        (#{id}, #{item})
-    </foreach>
+    <insert id="registerKeywordMatch" parameterType="com.ssafy.enjoyTrip.model.admin.dto.AttractionRegisterDto">
+        insert into keyword_match (attraction_id, keyword_code)
+        values
+        <foreach collection="keywordCodes" item="item" separator=",">
+            (#{id}, #{item})
+        </foreach>
     </insert>
 
     <insert id="registerImageInfo" parameterType="list">
@@ -72,7 +72,7 @@
         </foreach>
     </insert>
 
-    <resultMap id="AttractionMap" type="Attraction">
+    <resultMap id="AttractionMap" type="com.ssafy.enjoyTrip.model.admin.response.AttractionDetailResponse">
         <id column="a_id" property="id"/>
         <result column="a_type" property="type"/>
         <result column="a_title" property="title"/>
@@ -81,11 +81,11 @@
         <result column="a_overview" property="overview"/>
         <result column="a_latitude" property="latitude"/>
         <result column="a_longitude" property="longitude"/>
-        <collection property="keywords" ofType="Keyword" javaType="List">
+        <collection property="keywordResponses" ofType="com.ssafy.enjoyTrip.model.admin.response.KeywordResponse" javaType="List">
             <result column="k_keyword" property="keyword"/>
             <result column="k_code" property="code"/>
         </collection>
-        <collection property="imageInfos" ofType="ImageInfo" javaType="List">
+        <collection property="imageResponses" ofType="com.ssafy.enjoyTrip.model.admin.response.ImageResponse" javaType="List">
             <id column="i_id" property="id"/>
             <result column="i_image_path" property="imagePath"/>
             <result column="i_image_name" property="imageName"/>
@@ -93,7 +93,7 @@
         </collection>
     </resultMap>
 
-    <resultMap id="AttractionListMap" type="Attraction">
+    <resultMap id="AttractionListMap" type="com.ssafy.enjoyTrip.model.admin.response.AttractionResponse">
         <id column="a_id" property="id"/>
         <result column="a_title" property="title"/>
         <result column="a_address" property="address"/>
