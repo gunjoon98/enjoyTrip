@@ -15,5 +15,5 @@ public class AttractionKeywordSearch {
     private Integer cityCode;
     @NotNull
     private Integer column;
-    private List<@NotNull Integer> keywordCodes;
+    private List<Integer> keywordCodes;
 }

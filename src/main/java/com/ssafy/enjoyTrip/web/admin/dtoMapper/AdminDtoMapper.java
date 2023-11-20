@@ -16,6 +16,7 @@ public class AdminDtoMapper {
 
     public AttractionRegisterDto attractionRegisterToDto(AttractionRegister attractionRegister) {
         AttractionRegisterDto attractionRegisterDto = new AttractionRegisterDto();
+        attractionRegisterDto.setType(attractionRegister.getType());
         attractionRegisterDto.setAddress(attractionRegister.getAddress());
         attractionRegisterDto.setTitle(attractionRegister.getTitle());
         attractionRegisterDto.setCityCode(attractionRegister.getCityCode());

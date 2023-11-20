@@ -28,8 +28,8 @@ public class AttractionRegister {
     private Double latitude;
     @NotNull
     private Double longitude;
-    private List<@NotNull Integer> keywordCodes;
+    private List<Integer> keywordCodes;
     @NotNull
     private MultipartFile mainImage;
-    private List<@NotNull MultipartFile> images;
+    private List<MultipartFile> images;
 }

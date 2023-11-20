@@ -67,7 +67,7 @@ public class AdminService {
                     attractionRegisterDto.getId(),
                     imageName,
                     imagePath,
-                    true);
+                    false);
             imageDtoList.add(imageDto);
             fileDao.fileSave(image, createdName);
         }

@@ -37,11 +37,15 @@ public class AdminController {
         if(attractionRegister.getMainImage().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        System.out.println(attractionRegister.getKeywordCodes());
 
         List<MultipartFile> images = attractionRegister.getImages();
         for(int i=images.size()-1; i>=0; i--) {
             if(images.get(i).isEmpty()) images.remove(i);
+        }
+
+        List<Integer> keywordCodes = attractionRegister.getKeywordCodes();
+        for(int i=keywordCodes.size()-1; i>=0; i--) {
+            if(keywordCodes.get(i) == null) keywordCodes.remove(i);
         }
 
         AttractionRegisterDto attractionRegisterDto = adminDtoMapper.attractionRegisterToDto(attractionRegister);
