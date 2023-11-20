@@ -16,9 +16,6 @@ public class LoginFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String authorizationHeader = httpRequest.getHeader("Authorization");
 
-        System.out.println(((HttpServletRequest) request).getMethod());
-        System.out.println(((HttpServletRequest) request).getRequestURI());
-        System.out.println(httpRequest.getParameterMap());
         if(httpRequest.getMethod().equals("OPTIONS")) {
             chain.doFilter(request, response);
             return;

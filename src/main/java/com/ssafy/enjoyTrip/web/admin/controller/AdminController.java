@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class AdminController {
     private final AdminDtoMapper adminDtoMapper;
 
     @GetMapping("/attractions")
-    public ResponseEntity<?> getAttractionList(@ModelAttribute AttractionSearch attractionSearch) {
+    public ResponseEntity<?> getAttractionList(@Valid @ModelAttribute AttractionSearch attractionSearch) {
         return ResponseEntity.ok().body(adminService.getAttractionList(
                 adminDtoMapper.attractionSearchToDto(attractionSearch)));
     }
@@ -32,7 +33,7 @@ public class AdminController {
     }
 
     @PostMapping("/attraction")
-    public ResponseEntity<?> registerAttraction(@ModelAttribute AttractionRegister attractionRegister) {
+    public ResponseEntity<?> registerAttraction(@Valid @ModelAttribute AttractionRegister attractionRegister) {
 
         if(attractionRegister.getMainImage().isEmpty()) {
             return ResponseEntity.badRequest().build();

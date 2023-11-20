@@ -31,5 +31,5 @@ public class AttractionRegister {
     private List<Integer> keywordCodes;
     @NotNull
     private MultipartFile mainImage;
-    private List<MultipartFile> images;
+    private List<@NotNull MultipartFile> images;
 }
