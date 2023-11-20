@@ -16,9 +16,17 @@ public class LoginFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String authorizationHeader = httpRequest.getHeader("Authorization");
 
+        System.out.println(((HttpServletRequest) request).getMethod());
+        System.out.println(((HttpServletRequest) request).getRequestURI());
+        System.out.println(httpRequest.getParameterMap());
+        if(httpRequest.getMethod().equals("OPTIONS")) {
+            chain.doFilter(request, response);
+            return;
+        }
+
         if(httpRequest.getRequestURI().startsWith("/api/user")) {
             String method = httpRequest.getMethod();
-            if(method.equals("GET") || method.equals("POST")) {
+            if(method.equals("GET") || method.equals("POST") || method.equals("OPTIONS")) {
                 chain.doFilter(request, response);
                 return;
             }
