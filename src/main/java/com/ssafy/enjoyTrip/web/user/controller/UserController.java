@@ -29,13 +29,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> register(@RequestBody UserRegister userRegister) {
+    public ResponseEntity<?> register(@Valid @RequestBody UserRegister userRegister) {
         userService.register(userDtoMapper.userRegisterToDto(userRegister));
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<?> update(@PathVariable String userId, @RequestBody UserUpdate userUpdate) {
+    public ResponseEntity<?> update(@PathVariable String userId, @Valid @RequestBody UserUpdate userUpdate) {
         userService.update(userDtoMapper.userUpdateToDto(userId, userUpdate));
         return ResponseEntity.ok().build();
     }

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,7 +33,7 @@ public class AttractionController {
     }
 
     @GetMapping("/keyword/attractions")
-    public ResponseEntity<?> getAttractionListByKeyword(@ModelAttribute AttractionKeywordSearch attractionKeywordSearch) {
+    public ResponseEntity<?> getAttractionListByKeyword(@Valid @ModelAttribute AttractionKeywordSearch attractionKeywordSearch) {
 
         List<AttractionKeywordResponse> attractions = attractionService.getAttractionListByKeyword(
                 attractionDtoMapper.attractionKeywordSearchToDto(attractionKeywordSearch));
@@ -46,7 +47,7 @@ public class AttractionController {
     }
 
     @GetMapping("/map/attractions")
-    public ResponseEntity<?> getAttractionMapList(@ModelAttribute AttractionSearch attractionSearch, HttpServletRequest httpRequest) {
+    public ResponseEntity<?> getAttractionMapList(@Valid @ModelAttribute AttractionSearch attractionSearch, HttpServletRequest httpRequest) {
         String authorizationHeader = httpRequest.getHeader("Authorization");
 
         //로그인 X
@@ -75,7 +76,7 @@ public class AttractionController {
     }
 
     @PostMapping("/interest")
-    public ResponseEntity<?> registerInterest(@RequestBody Interest interest, HttpServletRequest request) {
+    public ResponseEntity<?> registerInterest(@Valid @RequestBody Interest interest, HttpServletRequest request) {
         InterestDto interestDto = attractionDtoMapper.interestToDto(interest, (String) request.getAttribute("userId"));
         attractionService.registerInterest(interestDto);
         return ResponseEntity.ok().build();
