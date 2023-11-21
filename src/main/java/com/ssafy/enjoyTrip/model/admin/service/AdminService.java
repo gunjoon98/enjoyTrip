@@ -18,7 +18,7 @@ public class AdminService {
     private final FileDao fileDao;
     //후에 전역 변수로 설정 필요
     private final int sizePerPage = 12;
-
+    private final String domain = "127.0.0.1/api";
     @Autowired
     public AdminService(AdminMapper adminMapper, FileDao fileDao) {
         this.adminMapper = adminMapper;
@@ -71,7 +71,7 @@ public class AdminService {
             imageName = image.getOriginalFilename();
             createdName = UUID.randomUUID() +
                     imageName.substring(imageName.lastIndexOf('.'));
-            imagePath = "/image/" + createdName;
+            imagePath = domain + "/image/" + createdName;
 
             imageDto = new ImageDto(
                     attractionRegisterDto.getId(),

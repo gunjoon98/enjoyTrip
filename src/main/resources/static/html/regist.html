@@ -37,11 +37,12 @@
     let registForm = document.getElementById("registForm");
     let url = "http://localhost/api/admin/attraction";
     const headers = new Headers();
-    headers.append('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImFkbWluIiwibmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzAwNDg2NzE4fQ.3VKY0rzlhQJUhTm4qiMI8SQGQ8xZ58u39g6f9UqLUaU');
+    headers.append('Authorization', 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6ImFkbWluIiwibmFtZSI6ImFkbWluIiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNzAwNTU1MDYwfQ.Btj03z48qZTQeFiMFGKtasRasaB3W3tN3jOxIGxIO1Y');
 
     registForm.onsubmit =(e)=> {
         e.preventDefault();
         const formData = new FormData(registForm);
+        console.log(formData);
         const config = {
             method:"post",
             headers,
