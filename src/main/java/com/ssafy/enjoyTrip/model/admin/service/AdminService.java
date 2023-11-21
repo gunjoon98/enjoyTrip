@@ -38,8 +38,18 @@ public class AdminService {
     @Transactional
     public void registerAttraction(AttractionRegisterDto attractionRegisterDto, MultipartFile mainImage, List<MultipartFile> images) {
         adminMapper.registerAttraction(attractionRegisterDto);
-        if(attractionRegisterDto.getKeywordCodes() != null && !attractionRegisterDto.getKeywordCodes().isEmpty()) {
-            adminMapper.registerKeywordMatch(attractionRegisterDto);
+        if(attractionRegisterDto.getKeywordCodes() != null) {
+            List<Integer> keywordCodes = new ArrayList<>(new HashSet<>(attractionRegisterDto.getKeywordCodes()));
+            attractionRegisterDto.setKeywordCodes(keywordCodes);
+
+            for(int i=keywordCodes.size()-1; i>=0; i--) {
+                KeywordMatchDto keywordMatchDto = adminMapper.getKeywordMatchDto(new KeywordMatchDto(
+                        attractionRegisterDto.getId(), keywordCodes.get(i)));
+                if(keywordMatchDto != null) keywordCodes.remove(i);
+            }
+            if(!keywordCodes.isEmpty()) {
+                adminMapper.registerKeywordMatch(attractionRegisterDto);
+            }
         }
 
         List<ImageDto> imageDtoList = new ArrayList<>();
@@ -73,5 +83,10 @@ public class AdminService {
         }
 
         adminMapper.registerImageInfo(imageDtoList);
+    }
+
+    @Transactional
+    public void deleteAttraction(int attractionId) {
+        adminMapper.deleteAttraction(attractionId);
     }
 }

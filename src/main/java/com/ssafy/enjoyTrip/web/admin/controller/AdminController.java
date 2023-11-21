@@ -53,4 +53,10 @@ public class AdminController {
                 attractionRegister.getImages());
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/attraction/{id}")
+    public ResponseEntity<?> deleteAttraction(@PathVariable("id") int attractionId) {
+        adminService.deleteAttraction(attractionId);
+        return ResponseEntity.ok().build();
+    }
 }

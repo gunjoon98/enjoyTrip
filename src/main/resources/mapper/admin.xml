@@ -48,6 +48,12 @@
         limit #{start}, #{sizePerPage}
     </select>
 
+    <select id="getKeywordMatchDto" parameterType="com.ssafy.enjoyTrip.model.admin.dto.KeywordMatchDto" resultType="com.ssafy.enjoyTrip.model.admin.dto.KeywordMatchDto">
+        select keyword_code as keywordCode, attraction_id as attractionId
+        from keyword_match
+        where keyword_code = ${keywordCode} and attraction_id = ${attractionId}
+    </select>
+
     <insert id="registerAttraction" parameterType="com.ssafy.enjoyTrip.model.admin.dto.AttractionRegisterDto">
         insert into attraction (type, title, address, city_code, overview, latitude, longitude)
         values (#{type}, #{title}, #{address}, #{cityCode}, #{overview}, #{latitude}, #{longitude})
@@ -71,6 +77,11 @@
             (#{item.attractionId}, #{item.imageName}, #{item.imagePath}, #{item.representative})
         </foreach>
     </insert>
+
+    <delete id="deleteAttraction" parameterType="int">
+        delete from attraction
+        where id = #{attractionId}
+    </delete>
 
     <resultMap id="AttractionMap" type="com.ssafy.enjoyTrip.model.admin.response.AttractionDetailResponse">
         <id column="a_id" property="id"/>
