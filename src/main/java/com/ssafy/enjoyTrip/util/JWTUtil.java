@@ -16,12 +16,12 @@ public class JWTUtil {
     private static final String SECRET_KEY = "ssafy";
     private static final long EXPIRATION_SECOND = 60 * 60 * 2; //2시간
 
-    public static String generateToken(String id, String pw, String role) {
+    public static String generateToken(String id, String name, String role) {
         long now = System.currentTimeMillis();
 
         Claims claims = Jwts.claims();
         claims.put("id", id);
-        claims.put("name", pw);
+        claims.put("name", name);
         claims.put("role", role);
 
         //토큰 생성

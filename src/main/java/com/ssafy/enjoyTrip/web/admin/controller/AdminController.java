@@ -45,6 +45,7 @@ public class AdminController {
         }
 
         List<Integer> keywordCodes = attractionRegister.getKeywordCodes();
+        System.out.println(keywordCodes);
         for(int i=keywordCodes.size()-1; i>=0; i--) {
             if(keywordCodes.get(i) == null) keywordCodes.remove(i);
         }

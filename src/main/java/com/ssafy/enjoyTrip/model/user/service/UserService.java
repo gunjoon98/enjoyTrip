@@ -22,7 +22,7 @@ public class UserService {
         UserResponse loginUser = userMapper.login(userLoginDto);
 
         if(loginUser == null) return null;
-        return new TokenResponse(JWTUtil.generateToken(loginUser.getId(), loginUser.getPw(), loginUser.getRole()));
+        return new TokenResponse(JWTUtil.generateToken(loginUser.getId(), loginUser.getName(), loginUser.getRole()));
     }
 
     public void register(UserRegisterDto userRegisterDto) {
