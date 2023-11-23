@@ -11,11 +11,10 @@ import java.nio.file.Paths;
 
 @Component
 public class FileDaoImpl implements FileDao {
-    private String uploadPath;
+    private final String uploadPath;
 
     FileDaoImpl() {
-        uploadPath = System.getProperty("user.dir").replace('\\', '/');
-        uploadPath += "/src/main/resources/static/image";
+        uploadPath = "C://resource";
     }
 
     public void fileSave(MultipartFile mfile, String fileName) {

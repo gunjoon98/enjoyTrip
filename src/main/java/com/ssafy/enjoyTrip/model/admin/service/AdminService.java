@@ -57,7 +57,7 @@ public class AdminService {
         String imageName = mainImage.getOriginalFilename();
         String createdName = UUID.randomUUID() +
                 imageName.substring(imageName.lastIndexOf('.'));
-        String imagePath = "/image/" + createdName;
+        String imagePath = domain + "/image/" + createdName;
 
         ImageDto imageDto = new ImageDto(
                 attractionRegisterDto.getId(),
